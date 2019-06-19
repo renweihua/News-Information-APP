@@ -1,0 +1,234 @@
+<template>
+	<div>
+		<uni-tabs @change="changeTab" :index="tabIndex">
+			<uni-tab-bar>
+				<div class="tab-bar-item" v-for="(tabBar, index) in categorys" :key="index" :ref="tabBar.id + index">
+					<text class="tab-bar-title" :class="[tabIndex === index ? 'active' : '']">{{tabBar.name}}</text>
+				</div>
+			</uni-tab-bar>
+			<uni-tab-content>
+				<list class="list" v-for="(tabItem, tabIndex) in newsList" :key="tabIndex" @loadmore="loadMore(tabIndex)"
+				 loadmoreoffset="10">
+					<refresh class="refresh" @refresh="onRefresh" @pullingdown="onPullingDown" :display="refreshing ? 'show' : 'hide'">
+						<text class="refresh-text">{{refreshText}}</text>
+					</refresh>
+					<cell v-for="(newsItem, newsIndex) in tabItem.data" :key="newsIndex">
+						<uni-media-list :data="newsItem" @click="goDetail(newsItem.id)"></uni-media-list>
+					</cell>
+					<cell class="loadmore">
+						<text class="loadmore-text">{{tabItem.loadingText}}</text>
+					</cell>
+				</list>
+			</uni-tab-content>
+		</uni-tabs>
+	</div>
+</template>
+
+<script>
+	import uniTabContent from '@/components/uni-tab-content/uni-tab-content.nvue';
+	import uniTabBar from '@/components/uni-tab-bar/uni-tab-bar.nvue';
+	import uniTabs from '@/components/uni-tabs/uni-tabs.nvue';
+	import uniMediaList from '@/components/uni-media-list/uni-media-list.nvue';
+
+	import {
+		friendlyDate
+	} from '@/common/util.js';
+
+	const dom = weex.requireModule('dom');
+
+	export default {
+		data() {
+			return {
+				refreshing: false,
+				refreshText: '下拉可以刷新',
+				newsList: [],
+				tabIndex: 0,
+				categorys : [{}],
+				serverUrl : 'https://newsapp.cnpscy.cn',
+			}
+		},
+		components: {
+			uniTabContent,
+			uniTabBar,
+			uniTabs,
+			uniMediaList
+		},
+		created() {
+			// 初始化列表信息
+			this.getCategorys(this.onloadFunction);
+		},
+		methods: {
+			onloadFunction(){
+				this.categorys.forEach((category, index) => {
+					this.newsList.push({
+						id: 'category' + index,
+						data: [],
+						requestParams: {
+							category_id: category.category_id,
+							page : 1,
+							maxpage : 2,
+						},
+						loadingText: '加载中...'
+					});
+				});
+				this.getList();
+			},
+			getCategorys(callback) { //分类
+				uni.request({
+					url: this.serverUrl + '/api/v1/article-categorys',
+					method: 'POST',
+					success: (ret) => {
+						if (ret.statusCode !== 200) {
+							console.log('请求失败', ret)
+						} else {
+							let data = ret.data.data;
+							for(let i = 0; i < data.length; i++)
+							{
+								data[i]['id'] = data[i]['category_id'];
+								data[i]['name'] = data[i]['category_name'];
+								data[i]['ref'] = 'category_' + data[i]['category_id'];
+							}
+							this.categorys = data;
+							callback();
+						}
+					}
+				});
+			},
+			getList(action = 1) {
+				let activeTab = this.newsList[this.tabIndex];
+				activeTab.requestParams.time = new Date().getTime() + '';
+				
+				if(activeTab.requestParams.page > activeTab.requestParams.maxpage){
+					this.loadingText = '已加载完！';
+					return;
+				}
+				else this.loadingText = '加载中...';
+				uni.request({
+					url: this.serverUrl + '/api/v1/articles',
+					method: 'POST',
+					data: activeTab.requestParams,
+					success: (result) => {
+						if (result.statusCode == 200) {
+							let config = result.data.config;
+							const data = result.data.data.data.map((news) => {
+								return {
+									id: news.article_id,
+									datetime: friendlyDate(new Date(news.create_date_his.replace(/\-/g, '/')).getTime()),
+									title: news.article_title,
+									image_url: news.article_cover,
+									source: config.site_web_author,
+									read_count: news.read_num
+								};
+							});
+							if (action === 1) {
+								activeTab.data = data;
+								this.refreshing = false;
+							} else {
+								data.forEach((news) => {
+									activeTab.data.push(news);
+								});
+							}
+							activeTab.requestParams.page = parseInt(result.data.data.cur_page) + parseInt(1);
+							activeTab.requestParams.maxpage = parseInt(result.data.data.count_page);
+						}
+					}
+				});
+			},
+			goDetail(detail) {
+				uni.navigateTo({
+					url: '/pages/detail/detail?query=' + detail
+				});
+			},
+			loadMore() {
+				this.getList(2);
+			},
+			async changeTab(event) {
+				this.tabIndex = event.index;
+				const activeNode = this.$refs[this.categorys[event.index].id + event.index][0];
+				let nodeSize = await this.getNodeSize(activeNode);
+				if (nodeSize.left + nodeSize.width > 750) {
+					let index = event.index - 4;
+					let targetNode = this.$refs[this.categorys[index].id + index][0];
+					dom.scrollToElement(targetNode, {});
+				} else if (nodeSize.left < 0) {
+					dom.scrollToElement(activeNode, {});
+				}
+				// 首次切换后加载数据
+				const activeTab = this.newsList[this.tabIndex];
+				if (activeTab.data.length === 0) {
+					this.getList();
+				}
+			},
+			getNodeSize(node) {
+				return new Promise((resolve, reject) => {
+					dom.getComponentRect(node, (result) => {
+						resolve(result.size);
+					});
+				});
+			},
+			onRefresh(event) {
+				this.refreshText = '正在刷新...';
+				this.refreshing = true;
+				this.getList();
+			},
+			onPullingDown(event) {
+				if (this.refreshing) {
+					return;
+				}
+				if (Math.abs(event.pullingDistance) > Math.abs(event.viewHeight)) {
+					this.refreshText = "释放立即刷新";
+				} else {
+					this.refreshText = "下拉可以刷新";
+				}
+			}
+		}
+	}
+</script>
+
+<style>
+	.tab-bar-item {
+		width: 150px;
+		height: 100px;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.tab-bar-title {
+		height: 100px;
+		line-height: 100px;
+		font-size: 30px;
+		color: #555;
+	}
+
+	.active {
+		color: #007AFF;
+	}
+
+	.loadmore {
+		height: 70px;
+		width: 750px;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.loadmore-text {
+		font-size: 30px;
+		text-align: center;
+		color: #999999;
+	}
+
+	.refresh {
+		width: 750px;
+		height: 70px;
+		flex-direction: row;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.refresh-text {
+		text-align: center;
+		font-size: 28px;
+		color: #999999;
+	}
+</style>

@@ -1,0 +1,1 @@
+<view class="center"><view class="logo"><image class="logo-img" src="{{avatarUrl}}"></image></view><view class="center-list"><view data-event-opts="{{[['tap',[['goAbout',['$event']]]]]}}" class="center-list-item" bindtap="__e"><text class="list-icon"></text><text class="list-text">关于应用</text><text class="navigat-arrow"></text></view></view></view>

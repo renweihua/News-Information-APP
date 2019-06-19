@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/detail/detail",
+    "pages/about/about",
+    "pages/ucenter/ucenter"
+  ],
+  "subPackages": [],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "新闻资讯",
+    "navigationBarBackgroundColor": "#2F85FC",
+    "backgroundColor": "#FFFFFF"
+  },
+  "tabBar": {
+    "color": "#000000",
+    "selectedColor": "#2F85FC",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/list/list",
+        "iconPath": "static/home.png",
+        "selectedIconPath": "static/home-active.png",
+        "text": "资讯"
+      },
+      {
+        "pagePath": "pages/ucenter/ucenter",
+        "iconPath": "static/center.png",
+        "selectedIconPath": "static/center-active.png",
+        "text": "小丑路人"
+      }
+    ]
+  },
+  "nvue": {
+    "pages": {
+      "pages/list/list.html": {
+        "window": {
+          "usingComponents": {}
+        }
+      }
+    },
+    "entryPagePath": "pages/list/list"
+  },
+  "nvueCompiler": "weex",
+  "splashscreen": {
+    "alwaysShowBeforeRender": true,
+    "autoclose": false
+  },
+  "appname": "小丑路人 - 新闻资讯APP",
+  "compilerVersion": "2.0.1",
+  "usingComponents": {}
+}
