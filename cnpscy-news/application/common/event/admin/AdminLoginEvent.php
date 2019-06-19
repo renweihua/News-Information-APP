@@ -27,7 +27,7 @@ class AdminLoginEvent implements Event
             'description' => '登录成功',
             'log_action' => request()->module() . '/' . request()->controller() . '/' . request()->action(),
             'log_method' => request()->method(),
-            // 'request_data' => json_encode($params),
+            'request_data' => json_encode(input()),
         ]);
 
         //登录次数累加
