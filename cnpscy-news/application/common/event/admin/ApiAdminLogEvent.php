@@ -25,7 +25,7 @@ class ApiAdminLogEvent implements Event
             'is_ok' => intval($params['status'] ?? 0),
             'log_action' => request()->module() . '/' . request()->controller() . '/' . request()->action(),
             'log_method' => request()->method(),
-            'request_data' => json_encode($params),
+            // 'request_data' => json_encode($params),
         ]);
     }
 }
