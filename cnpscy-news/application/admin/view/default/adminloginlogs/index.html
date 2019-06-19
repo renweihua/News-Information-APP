@@ -1,0 +1,120 @@
+{extend name="layout::default" /}
+
+{block name="title"}管理员登录日志列表{/block}
+
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>管理员登录日志列表</h5>
+                <div class="ibox-tools float-left">
+                    &nbsp;
+                    <a class=javascript:;" onclick="getList()" title="数据重载">
+                        <i class="fa fa-spin fa-refresh"></i>
+                    </a>
+                    &nbsp;
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    &nbsp;
+                </div>
+            </div>
+            <div class="ibox-title">
+                <div class="row">
+                    <form action="" method="post" id="form_data" class="first_form float-left"
+                          ajax-url="{:url('index')}" onsubmit="getList();return false;">
+                        <div class="col-sm-3 col-xs-6 col-md-3">
+                            <button type="reset" class="btn btn-warning"><i class="fa fa-refresh"></i> 重置搜索筛选</button>
+                        </div>
+                        <input type="hidden" name="start_function" value="0">
+                        <input type="hidden" name="page" value="1">
+                        <input type="hidden" name="limit" value="10">
+                        <div class="col-sm-3 col-xs-6 col-md-2 m-b-xs float-right">
+                            <div class="input-group">
+                                <input type="text" placeholder="请输入关键词" class="input-sm form-control" name="search"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="getList()"> <i
+                                            class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-6 col-md-2 m-b-xs float-right">
+                            <select class="input form-control input-s-sm inline" name="is_check">
+                                {if $cnpscy_is_check_list = lang('cnpscy_is_check_list')}
+                                    {foreach $cnpscy_is_check_list as $key => $check }
+                                        <option value="{$key}"> {$check}</option>
+                                    {/foreach}
+                                {/if}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="clearfix hidden-xs"></div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <table class="table footable table-bordered table-striped table-stripped toggle-arrow-tiny table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center"> Id </th>
+                            <th class="text-center"> 管理员 </th>
+                            <th class="text-center"> 请求方法 </th>
+                            <th class="text-center"> 请求类型 </th>
+                            <th class="text-center hidden-sm hidden-xs hidden-md"> IP </th>
+                            <th class="text-center hidden-sm hidden-xs hidden-md"> 登录时间 </th>
+                            <th class="text-center"> 状态 </th>
+                            <th class="text-center"> 操作 </th>
+                        </tr>
+                        </thead>
+                        <tbody class="contentList"></tbody>
+                    </table>
+                    <div class="clearfix hidden-xs"></div>
+                    <hr>
+                    <div id="pageList" class="float-right"></div>
+                    <div class="clearfix hidden-xs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    window.onload = function () {
+        window.onloadCallback = checkboxClass;
+        closeLayerLoading(getList);
+    }
+</script>
+<script id="form_list" type="text/html">
+    <<{#  if(d.status != 1 || isEmpty(d.data.data)){ }>>
+    <tr class="text-center">
+        <td colspan="100"> <<{ d.msg || '暂无数据！' }>></td>
+    </tr>
+    <<{#  }else{ }>>
+    <<{#  layui.each(d.data.data, function(index, item){ }>>
+    <tr id="id_<<{=item.log_id}>>" name="<<{=item.log_id}>>">
+        <td class="text-center"><a href="javascript:;"> <<{=item.log_id}>> </a></td>
+        <td class="text-center"> <<{=item.admin ? item.admin.admin_name : ''}>> </td>
+        <td class="text-center"> <<{=item.log_action}>> </td>
+        <td class="text-center"> <<{=item.log_method}>> </td>
+        <td class="text-center hidden-sm hidden-xs hidden-md"> <<{item.created_ip}>> </td>
+        <td class="text-center hidden-sm hidden-xs hidden-md">
+            <<{=item.create_time ? TimeTransformationDate(item.create_time, true, true, true, true, true) : ''}>>
+        </td>
+        <td class="text-center"> </td>
+        <td class="text-center">
+            <button class="btn btn-xs btn-info" title="编辑“<<{=item.log_id}>>”"
+                    onclick="hrefUrl('{:url(\'detail\')}?log_id=<<{=item.log_id}>>')"><i class="fa fa-pencil"></i>
+                编辑
+            </button>
+            <button class="btn btn-xs btn-danger" title="删除“<<{=item.log_id}>>”" onclick="delOperation('<<{item.log_id}>>', '{:url(\'delete\')}')">
+                <i class="fa fa-times"></i> 删除
+            </button>
+        </td>
+    </tr>
+    <<{#  }); }>>
+    <<{#  } }>>
+</script>
+{/block}

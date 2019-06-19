@@ -1,0 +1,130 @@
+{extend name="layout::default" /}
+
+{block name="title"}文章分类详情{/block}
+
+{block name="content"}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="ibox float-e-margins">
+			<div class="ibox-title">
+				<h5>文章分类详情</h5>
+				<div class="ibox-tools float-left">
+					&nbsp;
+					<a class=javascript:;" onclick="returnUrl()" title="数据重载">
+						<i class="fa fa-mail-reply-all"> 返回 </i>
+					</a>
+					&nbsp;
+					<a class="collapse-link">
+						<i class="fa fa-chevron-up"></i>
+					</a>
+					&nbsp;
+				</div>
+			</div>
+			<div class="ibox-content">
+				<form class="form-horizontal m-t" id="detail" method="post"
+					  onsubmit="formSaveSubmit(this);return false;" action="{:url('update')}"
+					  get-ajax-url="{:url('detail')}" return-url="{:url('index')}">
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{/block}
+
+{block name="style"}
+{include file="public/webuploader" /}
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+	window.onload = function () {
+		var unique_id = parseInt(getQueryString('category_id')) || 0,
+			parent_id = parseInt(getQueryString('parent_id')) || 0;
+		closeLayerLoading(getDetail(unique_id, 'category_id', function(res){
+			checkradioClass();
+			
+			getgoodCategorysSelectList('{:url("getSelectLists")}', isEmpty(res) ? parent_id : res.parent_id, $('form#detail select[name=parent_id]'));
+			
+			webUploaderImgs('#category_img_filePicker', '', '#category_img', 'input[name=category_img]', {
+                'img_limit': 1,
+                'single_graph_type': 1
+            });
+            if (!isEmpty(unique_id) && !isEmpty(res.category_img)) $('#category_img').append(webUploaderImgHtml(res.category_img, 'input[name=category_img]', $('#category_img_filePicker').attr('span-class')));
+		}));
+	}
+</script>
+<script type="text/html" id="detail-template">
+	<div class="form-group">
+		<label class="col-sm-3 control-label">父级栏目：</label>
+		<div class="col-sm-8">
+			<select name="parent_id" class="form-control">
+				<option value="0">--默认顶级--</option>
+			</select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label">文章分类名称：</label>
+		<div class="col-sm-8">
+			<input type="text" name="category_name" placeholder="输入文章分类名称" class="form-control" required="" value="<<{# if(!isEmpty(d.category_name)){  }>><<{d.category_name}>><<{# } }>>" />
+		</div>
+	</div>
+	<div class="form-group">
+        <label class="col-sm-3 control-label">封面：</label>
+        <div class="col-sm-8">
+            <input type="hidden" name="category_img" class="form-control" value="<<{# if(!isEmpty(d.category_img)){  }>><<{d.category_img}>><<{# } }>>">
+            <br>
+            <div id="category_img">
+                <div id="category_img_filePicker"><i class="icon-cloud-upload"></i></i> 选择单张图片</div>
+            </div>
+        </div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> 排序：</label>
+		<div class="col-sm-8">
+			<input type="text" name="category_rank" class="form-control" value="<<{# if(!isEmpty(d.category_rank)){  }>><<{d.category_rank}>><<{# }else{}>>0<<{# } }>>" />
+			<span class="help-block m-b-none">
+				<i class="fa fa-info-circle"></i>
+				<span class="red">*</span>排序从小到大
+			</span>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right"> 首页展示：</label>
+		<div class="col-sm-8">
+			<div class="radio i-checks">
+				<label>
+					<input type="radio" value="1" name="home_show" <<{# if(parseInt(d.home_show) == 1 || isEmpty(d)){ }>>checked<<{# }
+					}>>> <i></i> 是
+				</label>
+				<label>
+					<input type="radio" value="0" name="home_show" <<{# if(parseInt(d.home_show) == 0){ }>>checked<<{# }
+					}>> > <i></i> 否
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-3 control-label no-padding-right">审核状态： </label>
+		<div class="col-sm-8">
+			<div class="radio i-checks">
+				<label>
+					<input type="radio" value="1" name="is_check" <<{# if(parseInt(d.is_check) == 1 || isEmpty(d)){ }>>checked<<{# }
+					}>>> <i></i> 启用
+				</label>
+				<label>
+					<input type="radio" value="0" name="is_check" <<{# if(parseInt(d.is_check) == 0){ }>>checked<<{# }
+					}>> > <i></i> 禁用
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="col-sm-8 col-sm-offset-3">
+			<input id="category_id" name="category_id" class="form-control" type="hidden"
+				   value="<<{# if(!isEmpty(d.category_id)){  }>><<{d.category_id}>><<{# } }>>">
+			<button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
+		</div>
+	</div>
+</script>
+{/block}

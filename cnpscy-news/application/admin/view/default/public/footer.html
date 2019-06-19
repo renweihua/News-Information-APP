@@ -1,0 +1,21 @@
+<script src="__H+4.1__/js/bootstrap.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__H+4.1__/js/plugins/jeditable/jquery.jeditable.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__H+4.1__/js/plugins/footable/footable.all.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__H+4.1__/js/bootstrap.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__H+4.1__/js/content.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+
+<!-- 详情页 需要的js 开始 -->
+{if strtolower(request()->action()) == 'detail'}
+<script src="__H+4.1__/js/plugins/validate/jquery.validate.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__H+4.1__/js/plugins/validate/messages_zh.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__H+4.1__/js/plugins/iCheck/icheck.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+{/if}
+<!-- 详情页 需要的js 结束 -->
+
+<!-- 默认加载‘当前控制器’对应的JS 开始-->
+<link href="__STATIC_ADMIN__/css/{:strtolower(request()->controller())}.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+<script src="__STATIC_ADMIN__/js/{:strtolower(request()->controller())}.js?v={:cnpscy_config('resource_version_number')}"></script>
+<!-- 默认加载‘当前控制器’对应的JS 结束-->
+
+<!-- 开关按钮 -->
+<script src="__H+4.1__/js/plugins/switchery/switchery.js?v={:cnpscy_config('resource_version_number')}"></script>

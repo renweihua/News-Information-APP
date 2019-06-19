@@ -1,0 +1,153 @@
+{extend name="layout::default" /}
+
+{block name="title"}文章列表{/block}
+
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>文章列表</h5>
+                <div class="ibox-tools float-left">
+                    &nbsp;
+                    <a class=javascript:;" onclick="getList()" title="数据重载">
+                        <i class="fa fa-spin fa-refresh"></i>
+                    </a>
+                    &nbsp;
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    &nbsp;
+                </div>
+            </div>
+            <div class="ibox-title">
+                <div class="row">
+                    <form action="" method="post" id="form_data" class="first_form float-left"
+                          ajax-url="{:url('index')}" onsubmit="getList();return false;">
+                        <div class="col-sm-3 col-xs-6 col-md-3">
+                            <a onclick="hrefUrl('{:url(\'detail\')}')" href="javascript:void(0);"
+                               class="btn btn-primary "> <i class="fa fa-plus"></i> 添加文章 </a>
+                            <button type="reset" class="btn btn-warning"><i class="fa fa-refresh"></i> 重置搜索筛选</button>
+                        </div>
+                        <input type="hidden" name="start_function" value="0">
+                        <input type="hidden" name="page" value="1">
+                        <input type="hidden" name="limit" value="10">
+                        <div class="col-sm-3 col-xs-6 col-md-2 float-right">
+                            <div class="input-group">
+                                <input type="text" placeholder="请输入关键词" class="input-sm form-control" name="search"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="getList()"> <i
+                                            class="fa fa-search"></i> 搜索</button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-xs-6 col-md-2 m-b-xs float-right">
+                            <select class="input form-control input-s-sm inline" name="is_check">
+                                {if $cnpscy_is_check_list = lang('cnpscy_is_check_list')}
+                                {foreach $cnpscy_is_check_list as $key => $check }
+                                <option value="{$key}"> {$check}</option>
+                                {/foreach}
+                                {/if}
+                            </select>
+                        </div>
+                        <div class="col-sm-2 m-b-xs float-right">
+                            <select class="input form-control input-s-sm inline" name="is_public">
+                                {if $cnpscy_is_public_list = lang('cnpscy_is_public_list')}
+                                {foreach $cnpscy_is_public_list as $key => $public }
+                                <option value="{$key}"> {$public}</option>
+                                {/foreach}
+                                {/if}
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="clearfix hidden-xs"></div>
+            </div>
+            <div class="ibox-content">
+                <div class="row">
+                    <table class="table footable table-bordered table-striped table-stripped toggle-arrow-tiny table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">Id</th>
+                            <th class="text-center">文章标题</th>
+                            <th class="text-center hidden-sm">封面</th>
+                            <th class="text-center hidden-sm hidden-xs hidden-md">浏览</th>
+                            <th class="text-center hidden-sm hidden-xs hidden-md">创建/更新时间</th>
+                            <th class="text-center">公开度</th>
+                            <th class="text-center">状态</th>
+                            <th class="text-center">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody class="contentList"></tbody>
+                    </table>
+                    <div class="clearfix hidden-xs"></div>
+                    <hr>
+                    <div id="pageList" class="float-right"></div>
+                    <div class="clearfix hidden-xs"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    window.onload = function () {
+        window.onloadCallback = checkboxClass;
+        closeLayerLoading(getList);
+    }
+</script>
+<script id="form_list" type="text/html">
+    <<{#  if(d.status != 1 || isEmpty(d.data.data)){ }>>
+    <tr class="text-center">
+        <td colspan="100"> <<{ d.msg || '暂无数据！' }>></td>
+    </tr>
+    <<{#  }else{ }>>
+    <<{#  layui.each(d.data.data, function(index, item){ }>>
+    <tr id="id_<<{=item.article_id}>>" name="<<{=item.article_title}>>">
+        <td class="text-center"><a href="javascript:;"> <<{=item.article_id}>> </a></td>
+        <td class="text-center"> <<{=item.article_title}>></td>
+        <td class="text-center hidden-sm">
+            <img src="<<{=item.article_cover}>>" />
+        </td>
+        <td class="text-center hidden-sm hidden-xs hidden-md"> <<{item.read_num || 0}>> </td>
+        <td class="text-center hidden-sm hidden-xs hidden-md">
+            <<{=item.create_time ? TimeTransformationDate(item.create_time, true, true, true, true, true) : ''}>>
+            <br>
+            <<{=item.update_time ? TimeTransformationDate(item.update_time, true, true, true, true, true) : ''}>>
+        </td>
+        <td class="text-center">
+            <<{# if(item.is_public == 1){ }>>
+            <input type="checkbox" class="js-switch"
+                   onchange="changeFiledStatus(this, '{:url(\'changeFiledStatus\')}', {'article_id' : '<<{=item.article_id}>>', 'change_field' : 'is_public', 'change_value':0})"
+                   checked=""/>
+            <<{# }else{ }>>
+            <input type="checkbox" class="js-switch"
+                   onchange="changeFiledStatus(this, '{:url(\'changeFiledStatus\')}', {'article_id' : '<<{=item.article_id}>>', 'change_field' : 'is_public', 'change_value':1})"/>
+            <<{# } }>>
+        </td>
+        <td class="text-center">
+            <<{# if(item.is_check == 1){ }>>
+            <input type="checkbox" class="js-switch"
+                   onchange="changeFiledStatus(this, '{:url(\'changeFiledStatus\')}', {'article_id' : '<<{=item.article_id}>>', 'change_field' : 'is_check', 'change_value':0})"
+                   checked=""/>
+            <<{# }else{ }>>
+            <input type="checkbox" class="js-switch"
+                   onchange="changeFiledStatus(this, '{:url(\'changeFiledStatus\')}', {'article_id' : '<<{=item.article_id}>>', 'change_field' : 'is_check', 'change_value':1})"/>
+            <<{# } }>>
+        </td>
+        <td class="text-center">
+            <button class="btn btn-xs btn-info" title="编辑“<<{=item.article_title}>>”"
+                    onclick="hrefUrl('{:url(\'detail\')}?article_id=<<{=item.article_id}>>')"><i
+                    class="fa fa-pencil"></i> 编辑
+            </button>
+            <button class="btn btn-xs btn-danger" title="删除“<<{=item.article_title}>>”"
+                    onclick="delOperation('<<{item.article_id}>>', '{:url(\'delete\')}')"><i class="fa fa-times"></i> 删除
+            </button>
+        </td>
+    </tr>
+    <<{#  }); }>>
+    <<{#  } }>>
+</script>
+{/block}

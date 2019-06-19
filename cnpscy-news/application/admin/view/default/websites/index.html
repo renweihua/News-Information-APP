@@ -1,0 +1,114 @@
+{extend name="layout::default" /}
+
+{block name="title"}站点配置{/block}
+
+{block name="content"}
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>站点配置</h5>
+                </div>
+                <div class="ibox-title">
+                    <div class="panel-lead"><em>系统配置</em>可以在此增改系统的变量和分组,也可以自定义分组和变量,如果需要删除请从数据库中删除</div>
+                    <ul class="nav nav-tabs">
+                        {if !empty($config_group_list)}
+                            {foreach $config_group_list as $key => $group_list}
+                                <li class="{if $key == 0}active{/if}">
+                                    <a href="#config_group_{$key}" data-toggle="tab">{$group_list}</a>
+                                </li>
+                            {/foreach}
+                        {/if}
+                        <li>
+                            <a href="{:url('configs/detail')}"><i class="fa fa-plus"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix hidden-xs"></div>
+                </div>
+                <div class="ibox-content">
+                    <div class="panel-body">
+                        <div id="myTabContent" class="tab-content">
+                            <form id="basic-form" class="edit-form form-horizontal" method="POST" action="{:url('update')}" get-ajax-url="{:url('index')}"
+                                  onsubmit="formSaveSubmit(this);return false;">
+                                {if !empty($config_group_list)}
+                                    {foreach $config_group_list as $key => $group_list}
+                                        <div class="tab-pane fade {if $key == 0}active in{/if}" id="config_group_{$key}">
+                                            <div class="widget-body no-padding">
+                                                <table class="table table-striped">
+                                                    <thead>
+                                                    <tr>
+                                                        <th width="15%">变量标题</th>
+                                                        <th width="70%">变量值</th>
+                                                        <th width="15%">变量名</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    {if !empty($configs_list[$key])}
+                                                        {foreach $configs_list[$key] as $config}
+                                                            <tr>
+                                                                <td>{$config.config_title}</td>
+                                                                <td>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-8 col-xs-12">
+                                                                            {switch config.config_type}
+                                                                                {case 3}<!--数组-->
+                                                                                    <textarea class="form-control height-10rem" name="{$config.config_name}">{$config.config_value}</textarea>
+                                                                                {/case}
+                                                                                {case 4}<!--枚举-->
+                                                                                    <select class="form-control" name="{$config.config_name}">
+                                                                                        {if !empty($config.config_extra)}
+                                                                                            {foreach $config.config_extra as $key => $config_extra}
+                                                                                                <option value="{$key}" {if $key == $config.config_value}selected{/if} > {$config_extra} </option>
+                                                                                            {/foreach}
+                                                                                        {/if}
+                                                                                    </select>
+                                                                                {/case}
+                                                                                {default /}
+                                                                                    <input class="form-control" type="text" name="{$config.config_name}" data-rule="" data-tip="{$config.config_remark}" value="{$config.config_value}"/>
+                                                                            {/switch}
+                                                                        </div>
+                                                                        <div class="col-sm-4"></div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>{$config.config_name}</td>
+                                                            </tr>
+                                                        {/foreach}
+                                                    {/if}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    {/foreach}
+                                {/if}
+                            </form>
+
+                            <tfoot>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <button type="submit" class="btn btn-success btn-embossed" onclick="$('form#basic-form').submit()"> 全部更新 </button>
+                                </td>
+                                <td></td>
+                            </tr>
+                            </tfoot>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block name="style"}
+<style type="text/css">
+    .fade{display: none;}
+    .fade.in{display: block;}
+</style>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    window.onload = function () {
+        closeLayerLoading(getList);
+    }
+</script>
+{/block}

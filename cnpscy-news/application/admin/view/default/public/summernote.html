@@ -1,0 +1,20 @@
+<!-- summernote 文本编辑器 -->
+<link href="__H+4.1__/css/plugins/summernote/summernote.css" rel="stylesheet">
+<link href="__H+4.1__/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+<style type="text/css">
+    .note-editable {
+        min-height: 15rem;
+    }
+</style>
+
+<script src="__H+4.1__/js/plugins/summernote/summernote.min.js"></script>
+<script src="__H+4.1__/js/plugins/summernote/summernote-zh-CN.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".summernote").summernote({lang: "zh-CN"});
+    });
+
+    function summernoteRendering() {
+        $(".summernote").summernote({lang: "zh-CN"});
+    }
+</script>

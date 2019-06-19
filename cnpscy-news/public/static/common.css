@@ -1,0 +1,287 @@
+.padding-left-10 { padding-left: 10px; }
+
+.center, .align-center, .text-center, .text_center {
+    text-align: center !important;
+}
+
+
+.text-left, .text_left {
+    text-align: left;
+}
+
+.text-right, .text_right {
+    text-align: right;
+}
+
+.display-none, .display_none {
+    display: none;
+}
+.display-none-important{
+    display: none!important;
+}
+
+.display-block, .display_block {
+    display: block;
+}
+.display-block-important{
+    display: block!important;
+}
+
+.float-right, .float_right {
+    float: right;
+}
+
+.float-left, .float_left {
+    float: left;
+}
+
+.clear-both, .clear-both {
+    clear: both;
+}
+.margin-top-10{ margin-top: 10px; }
+.margin-right-10
+{
+    margin-right:10px;
+}
+.margin-bottom-10
+{
+    margin-bottom:10px!important;
+}
+
+.padding-none, .padding_none,
+.padding-0, .padding_0{
+    padding: 0!important;
+}
+.padding-15{
+    padding:15px;
+}
+.padding-top-0{padding-top: 0!important;}
+.padding-top-25{padding-top: 25px;}
+.padding-bottom-45{padding-bottom: 45px;}
+.padding-left-0
+{
+    padding-left:0!important;
+}
+.padding-right-10
+{
+    padding-right: 10px;
+}
+.padding-top-20{padding-top: 20px;}
+
+.width-unset {
+    width: unset;
+}
+
+.width-inherit {
+    width: inherit;
+}
+
+.cursor-pointer, .cursor_pointer {
+    cursor: pointer;
+}
+
+.display-inline{
+    display: inline;
+}
+
+.display-inline-block{
+    display: inline-block;
+}
+.opacity-0
+{
+    opacity: 0;
+}
+.opacity-0_5
+{
+    opacity: 0.5;
+}
+.border-radius-0
+{
+    border-radius:0;
+}
+.min-height-50, .min_height_50
+{
+    min-height: 50px;
+}
+
+.height-10rem, .height_10rem {
+    height: 10rem!important;
+}
+
+.height-5rem, .height_5rem {
+    height: 5rem;
+}
+
+.height-100-percentage
+{
+    height: 100%!important;
+}
+
+.margin-top-0{margin-top:0!important;}
+.margin-top-50, .margin_top_50 {
+    margin-top: 50px;
+}
+
+.margin-bootom-10, .margin_bootom_10 {
+    margin-bottom: 10px;
+}
+
+.margin-top-33, .margin_top_33 {
+    margin-top: 33px;
+}
+
+.margin-top-40, .margin_top_40 {
+    margin-top: 40px;
+}
+
+
+.margin-top-26, .margin_top_26 {
+    margin-top: 26px;
+}
+
+.min-height-10-rem, .min_height_10_rem {
+    min-height: 10rem;
+}
+
+.color-white {
+    color: #fff;
+}
+
+.background-color-red {
+    background-color: #dd5a43 !important;
+}
+.margin-right-2-rem, .margin_right_2_rem {
+    margin-right: 2rem;
+}
+
+.width-30-rem, .width_30_rem {
+    width: 30rem;
+}
+
+.width-10-rem, .width_10_rem {
+    width: 10rem;
+}
+
+.margin-bottom-1-rem, .margin_bottom_1_rem {
+    margin-bottom: 1rem;
+}
+
+.width-20-rem, .width_20_rem {
+    width: 20rem;
+}
+
+.margin-right-2-rem, .margin_right_2_rem {
+    margin-right: 2rem;
+}
+
+.width-height-13_5-rem, .width_height_13_5_rem {
+    width: 13.5rem;
+    height: 13.5rem;
+}
+
+
+.width-100-percentage
+{
+    width: 100%!important;
+}
+
+.width-50-percentage
+{
+    width: 50%!important;
+}
+
+.line-height-25-px
+{
+    line-height: 25px;
+}
+
+
+.position-relative, .position_relative {
+    position: relative;
+}
+
+.position-absolute, .position_absolute {
+    position: absolute;
+}
+
+
+.color-danger{
+    color: #FFF !important;
+    background-color: #d15b47 !important;
+    border-color: #d15b47;
+    border: 1px solid #FFF;
+    padding: 10px;
+}
+.color-info{
+    color: #FFF !important;
+    background-color: #6fb3e0 !important;
+    border-color: #6fb3e0;
+    border: 1px solid #FFF;
+    padding: 10px;
+}
+
+
+
+
+
+
+
+
+/**
+ *
+ * widh
+ * 
+ */
+
+.width-auto, .width_auto
+{
+	width: auto!important;
+}
+.width-30-px, .width-30{width:30px;}
+.width-50-px, .width-50{width:50px;}
+
+
+
+
+.disabled, .disabled:hover{
+    color: #848484 !important;
+    background-color: #eee !important;
+    border:1px solid #eee!important;
+}
+
+.cursor-no-drop
+{
+    cursor: no-drop;    
+}
+
+
+table img{max-width: 100px;}
+
+
+
+
+/**
+ * 自己的webuploader样式
+ */
+#cboxClose {
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 32px;
+    color: #fff;
+    font-size: 21px;
+    height: 28px;
+    width: 28px;
+    padding-bottom: 2px;
+    margin-left: 0;
+    right: -14px;
+    top: -14px;
+}
+.profile-picture {
+    border: 1px solid #CCC;
+    background-color: #FFF;
+    padding: 4px;
+    display: inline-block;
+    max-width: 100%;
+    -moz-box-sizing: border-box;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.15);
+}

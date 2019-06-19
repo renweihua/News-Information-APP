@@ -1,0 +1,81 @@
+{extend name="layout::default" /}
+
+{block name="title"}银行详情{/block}
+
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>银行详情</h5>
+                <div class="ibox-tools float-left">
+                    &nbsp;
+                    <a class=javascript:;" onclick="returnUrl()" title="数据重载">
+                        <i class="fa fa-mail-reply-all"> 返回 </i>
+                    </a>
+                    &nbsp;
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    &nbsp;
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="detail" method="post"
+                      onsubmit="formSaveSubmit(this);return false;" action="{:url('update')}"
+                      get-ajax-url="{:url('detail')}" return-url="{:url('index')}">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="style"}
+{include file="public/webuploader" /}
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    window.onload = function () {
+        var unique_id = parseInt(getQueryString('bank_id')) || 0;
+        closeLayerLoading(getDetail(unique_id, 'bank_id', function (res) {
+            checkradioClass();
+            webUploaderImgs('#bank_img_filePicker', '', '#bank_img', 'input[name=bank_img]', {
+                'img_limit': 1,
+                'single_graph_type': 1
+            });
+            if (!isEmpty(unique_id) && !isEmpty(res.bank_img)) $('#bank_img').append(webUploaderImgHtml(res.bank_img, 'input[name=bank_img]', $('#bank_img_filePicker').attr('span-class')));
+        }));
+    }
+</script>
+<script type="text/html" id="detail-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">快递名称：</label>
+        <div class="col-sm-8">
+            <input name="bank_name" class="form-control" type="text"
+                   value="<<{# if(!isEmpty(d.bank_name)){  }>><<{d.bank_name}>><<{# } }>>">
+            <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 唯一标识</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">银行图标：</label>
+        <div class="col-sm-8">
+            <input type="hidden" name="bank_img" class="form-control"
+                   value="<<{# if(!isEmpty(d.bank_img)){  }>><<{d.bank_img}>><<{# } }>>">
+            <br>
+            <div id="bank_img">
+                <div id="bank_img_filePicker"><i class="icon-cloud-upload"></i></i> 选择单张图片</div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-3">
+            <input name="bank_id" class="form-control" type="hidden"
+                   value="<<{# if(!isEmpty(d.bank_id)){  }>><<{d.bank_id}>><<{# } }>>">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
+        </div>
+    </div>
+</script>
+{/block}

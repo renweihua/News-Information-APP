@@ -1,0 +1,13 @@
+/.idea
+/.vscode
+/vendor
+*.log
+thinkphp
+.env
+.DS_Store
+/thinkphp
+/runtime
+/extend
+/.gitee
+/jempson-fastadmin_html-master
+/public/uploads

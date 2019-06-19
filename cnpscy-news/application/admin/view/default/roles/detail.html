@@ -1,0 +1,207 @@
+{extend name="layout::default" /}
+
+{block name="title"}后台菜单栏目详情{/block}
+
+{block name="content"}
+<div class="row">
+    <div class="col-sm-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>后台菜单栏目详情</h5>
+                <div class="ibox-tools float-left">
+                    &nbsp;
+                    <a class=javascript:;" onclick="returnUrl()" title="数据重载">
+                        <i class="fa fa-mail-reply-all"> 返回 </i>
+                    </a>
+                    &nbsp;
+                    <a class="collapse-link">
+                        <i class="fa fa-chevron-up"></i>
+                    </a>
+                    &nbsp;
+                </div>
+            </div>
+            <div class="ibox-content">
+                <form class="form-horizontal m-t" id="detail" method="post"
+                      onsubmit="formSaveSubmit(this);return false;" action="{:url('update')}"
+                      get-ajax-url="{:url('detail')}" return-url="{:url('index')}">
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+    window.onload = function () {
+        var unique_id = parseInt(getQueryString('role_id')) || 0;
+        closeLayerLoading(getDetail(unique_id, 'role_id', function(res){
+            checkradioClass();
+
+            let menu_ids = new Array();
+            if (res.menus) {
+                for (var i = 0; i < res.menus.length; i++) menu_ids.push(res.menus[i].menu_id);    
+            }
+            getRoleSelectMenusList("{:url('adminmenus/getSelectLists')}", menu_ids);
+        }));
+    }
+</script>
+<script type="text/html" id="detail-template">
+    <div class="form-group">
+        <label class="col-sm-3 control-label">用户组名：</label>
+        <div class="col-sm-8">
+            <input type="text" name="role_name" placeholder="输入角色名称" class="form-control" required="" value="<<{# if(!isEmpty(d.role_name)){  }>><<{d.role_name}>><<{# } }>>" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> 用户组备注：</label>
+        <div class="col-sm-8">
+            <textarea name="role_remarks" class="form-control"><<{# if(!isEmpty(d.role_remarks)){  }>><<{d.role_remarks}>><<{# } }>></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right">审核状态： </label>
+        <div class="col-sm-8">
+            <div class="radio i-checks">
+                <label>
+                    <input type="radio" value="1" name="is_check" <<{# if(parseInt(d.is_check) == 1 || isEmpty(d)){ }>>checked<<{# }
+                    }>>> <i></i> 启用
+                </label>
+                <label>
+                    <input type="radio" value="0" name="is_check" <<{# if(parseInt(d.is_check) == 0){ }>>checked<<{# }
+                    }>> > <i></i> 禁用
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label no-padding-right"> 权限分配：</label>
+        <div class="col-sm-8">
+            <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tbody>
+                    <tr>
+                        <td height="30" style="padding-left:10px;border-bottom:#CCCCCC solid 1px; line-height:25px; background-color:#F4F8FB">
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace ace-checkbox-2 checkAll-true" onclick="checkAll(true)" value="全选">
+                                <span class="lbl"> 权限全选</span>
+                            </label>
+                            &nbsp;&nbsp;&nbsp;
+                            <label class="pos-rel">
+                                <input type="checkbox" class="ace ace-checkbox-2 checkAll-false" onclick="checkAll(false)" value="全选">
+                                <span class="lbl"> 取消全选</span>
+                            </label>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-3">
+            <input id="role_id" name="role_id" class="form-control" type="hidden"
+                   value="<<{# if(!isEmpty(d.role_id)){  }>><<{d.role_id}>><<{# } }>>">
+            <button class="btn btn-primary" type="submit"><i class="fa fa-check"></i> 提交</button>
+        </div>
+    </div>
+</script>
+{/block}
+
+
+@extends("_admin.layouts.main")
+
+@section("content")
+        <div class="page-header">
+            <h1>
+                您当前操作
+                <small>
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                    <span>新增</span>角色
+                </small>
+            </h1>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <form class="form-horizontal" id="details" method="post" action="" onsubmit="formSaveSubmit( this );return false;">
+                    <input type="hidden" name="role_id" value="0">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right"> 用户组名：  </label>
+                        <div class="col-sm-10">
+                            <input type="text" name="role_name" value="" class="col-xs-10 col-sm-4">
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right"> 用户组备注：  </label>
+                        <div class="col-sm-10">
+                            <textarea name="role_remarks" class="col-xs-10 col-sm-4"></textarea>
+                        </div>
+                    </div>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right"> 是否可用：  </label>
+                        <div class="col-sm-10">
+                            <input name="is_check" value="1" class="ace ace-switch ace-switch-5" type="checkbox" checked>
+                            <span class="lbl"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="space-4"></div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label no-padding-right"> 权限分配：</label>
+                    </div>
+                    <hr>
+                    <table width="90%" border="0" align="center" cellpadding="0" cellspacing="0">
+                        <tbody>
+                            <tr>
+                                <td height="30" style="padding-left:10px;border-bottom:#CCCCCC solid 1px; line-height:25px; background-color:#F4F8FB">
+                                    <label class="pos-rel">
+                                        <input type="checkbox" class="ace ace-checkbox-2 checkAll-true" onclick="checkAll(true)" value="全选">
+                                        <span class="lbl"> 权限全选</span>
+                                    </label>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <label class="pos-rel">
+                                        <input type="checkbox" class="ace ace-checkbox-2 checkAll-false" onclick="checkAll(false)" value="全选">
+                                        <span class="lbl"> 取消全选</span>
+                                    </label>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="clearfix form-actions">
+                        <div class="col-xs-12 col-sm-12 text-center">
+                            <button class="btn btn-info" type="submit">
+                                <i class="ace-icon fa fa-check bigger-110"></i>
+                                保存
+                            </button>
+
+                            &nbsp; &nbsp; &nbsp;
+                            <button class="btn" type="reset">
+                                <i class="ace-icon fa fa-undo bigger-110"></i>
+                                重置
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @section("style-link")
+    <link rel="stylesheet" href="{{ asset('/assets/cnpscy_admin/css/roles.css') }}">
+    @endsection
+    @section('script-src')
+    <script src="{{ asset('/assets/cnpscy_admin/js/roles.js') }}"></script>
+    @endsection
+    @section('script')
+    <script type="text/javascript">
+        window.onload = function () {
+            closeLayerLoading(closeAllLayer);
+            var role_id = getQueryString('role_id');
+            if (!isEmpty(role_id) && role_id > 0) {
+                $('form#details input[name=role_id]').val(role_id);
+                $('.page-header h1 small span').html('编辑');
+                getDetail(role_id);
+            }else getRoleSelectMenusList();
+        }
+    </script>
+    @endsection
+@endsection

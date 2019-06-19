@@ -1,0 +1,109 @@
+form#detail table tbody tr td.first_td{
+	height:40px;
+	border-bottom:#CCCCCC solid 1px;
+	padding-left:10px;
+}
+form#detail table tbody tr td.two_td{
+	height:30px;
+	padding-left:30px;
+	border-bottom:#E7EBF8 dashed 1px;
+	color:#333333;
+}
+form#detail table tbody tr td.three_td{
+	height:30px;
+	padding-left:50px;
+	border-bottom:#E7EBF8 dashed 1px;
+	color:#666666;
+}
+form#detail table tbody tr td.three_td span{
+	margin-right:20px;
+}
+form#detail table tbody tr td.four_td{
+	padding-left:70px;
+	border-bottom:#E7EBF8 dashed 1px;
+	color:#666666;
+}
+
+
+
+
+
+
+
+
+
+
+th, td, .table-bordered {
+    border-radius: 0 !important;
+}
+td > label, th > label, label.inline {
+    margin-bottom: 0;
+    line-height: inherit;
+}
+label, .lbl {
+    vertical-align: middle;
+}
+label {
+    font-weight: normal;
+    font-size: 14px;
+}
+input[type=checkbox].ace:checked, input[type=radio].ace:checked, input[type=checkbox].ace:focus, input[type=radio].ace:focus {
+    outline: none !important;
+}
+input[type=checkbox].ace, input[type=radio].ace {
+    opacity: 0;
+    position: absolute;
+    z-index: 12;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+input[type=checkbox].ace + .lbl, input[type=radio].ace + .lbl {
+    position: relative;
+    z-index: 11;
+    display: inline-block;
+    margin: 0;
+    line-height: 20px;
+    min-height: 18px;
+    min-width: 18px;
+    font-weight: normal;
+}
+th .lbl, td .lbl {
+    margin-bottom: 0;
+}
+label, .lbl {
+    vertical-align: middle;
+}
+input[type=checkbox].ace.ace-checkbox-2:checked + .lbl::before, input[type=radio].ace.ace-checkbox-2:checked + .lbl::before {
+    background-color: #f9a021;
+    border-color: #f9a021;
+    color: #FFF;
+}
+input[type=checkbox].ace.ace-checkbox-2 + .lbl::before, input[type=radio].ace.ace-checkbox-2 + .lbl::before {
+    box-shadow: none;
+}
+input[type=checkbox].ace:checked + .lbl::before, input[type=radio].ace:checked + .lbl::before {
+    display: inline-block;
+    content: '\f00c';
+    background-color: #f5f8fc;
+    border-color: #adb8c0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0 -15px 10px -12px rgba(0, 0, 0, 0.05), inset 15px 10px -12px rgba(255, 255, 255, 0.1);
+}
+input[type=checkbox].ace + .lbl::before, input[type=radio].ace + .lbl::before {
+    font-family: fontAwesome;
+    font-weight: normal;
+    font-size: 12px;
+    color: #32a3ce;
+    content: "\a0";
+    background-color: #fafafa;
+    border: 1px solid #c8c8c8;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    border-radius: 0;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    height: 16px;
+    line-height: 14px;
+    min-width: 16px;
+    margin-right: 1px;
+}

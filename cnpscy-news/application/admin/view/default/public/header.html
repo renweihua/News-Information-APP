@@ -1,0 +1,32 @@
+<link rel="shortcut icon" href="{:cnpscy_config('site_web_logo')}" />
+<link href="__H+4.1__/css/bootstrap.min.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+<link href="__H+4.1__/css/font-awesome.min.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+<link href="__H+4.1__/css/plugins/footable/footable.core.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+
+<link href="__H+4.1__/css/animate.min.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+<link href="__H+4.1__/css/style.min.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+<!-- <base target="_blank"> -->
+
+<link rel="stylesheet" href="__STATIC__/layer/layer.css?v={:cnpscy_config('resource_version_number')}" />
+<link rel="stylesheet" href="__STATIC__/layui/css/layui.css?v={:cnpscy_config('resource_version_number')}" />
+<link rel="stylesheet" href="__STATIC__/common.css?v={:cnpscy_config('resource_version_number')}" />
+
+<!-- 开关按钮 -->
+<link href="__H+4.1__/css/plugins/iCheck/custom.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+<link href="__H+4.1__/css/plugins/switchery/switchery.css?v={:cnpscy_config('resource_version_number')}" rel="stylesheet" />
+
+
+<script src="__H+4.1__/js/jquery.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__STATIC__/layer/layer.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__STATIC__/layui/layui.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__STATIC__/axios/axios.min.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__STATIC_ADMIN__/js/common.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__STATIC_ADMIN__/js/bbs-common.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script src="__STATIC__/function.js?v={:cnpscy_config('resource_version_number')}"></script>
+<script>
+    let webAdminTitle = "{:cnpscy_config('site_web_title')}",
+        is_detail = "{:strtolower(request()->action())}" == 'detail' ? 1 : 0,
+        login_url = "{:url('Login/index')}";
+    webTitle = [webAdminTitle, 'text-align:center;'];
+    set_axios(axios, layer);//axios全局设置
+</script>
