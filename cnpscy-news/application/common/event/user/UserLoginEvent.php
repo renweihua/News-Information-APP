@@ -15,7 +15,7 @@ class UserLoginEvent implements Event
     public static function init(array $params = [], $user)
     {
         $client_info = get_client_info();
-        $user_id = $user['id'] ?? 0;
+        $user_id = intval($user['id'] ?? 0);
         // 登录日志
         UserLoginLogs::create([
             'user_id' => $user_id,
