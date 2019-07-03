@@ -20,7 +20,7 @@ class Indexs extends Common
 
         $admin_info = session(cnpscy_config('admin_info_session_unique'));
         $admin_info['roles'] = empty($admin_info['roles']) ? [] : $admin_info['roles'];
-        $admin_info['roles'][] = empty($admin_info['roles']) ? [] : $admin_info['roles'][0];
+        $admin_info['roles'][] = empty($admin_info['roles']) ? [] : $admin_info['roles'];
         $admin_info['roles'][0]['role_name'] = empty($admin_info['roles'][0]['role_name']) ? '管理员' : $admin_info['roles'][0]['role_name'];
         $this->assign('admin_info', $admin_info);
     }
